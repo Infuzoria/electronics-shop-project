@@ -1,5 +1,3 @@
-import csv
-
 class Item:
     """
     Класс для представления товара в магазине.
@@ -96,3 +94,12 @@ class Item:
         :return: число
         """
         return int(float(string))
+
+
+    def __add__(self, other):
+        """
+        Функция выполняет операцию сложения по количеству товара в магазине
+        """
+        if isinstance(other, Item):
+            return self.quantity + other.quantity
+        return ValueError("Складывать можно только объекты Item и дочерние от них.")
