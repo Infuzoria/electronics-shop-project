@@ -73,16 +73,22 @@ class Item:
         cls.all = []
 
         import csv
-        with open("items.csv", encoding = 'Windows - 1251') as r_file:
 
-            file_reader = csv.reader(r_file, delimiter = ",")
-            count = 0
+        try:
+            with open("items.csv", encoding = 'Windows - 1251') as r_file:
 
-            # Считывание данных из CSV файла
-            for row in file_reader:
-                if count != 0:
-                    cls(row[0], float(row[1]), int(row[2]))
-                count += 1
+                file_reader = csv.reader(r_file, delimiter = ",")
+                count = 0
+
+                # Считывание данных из CSV файла
+                for row in file_reader:
+                    if count != 0:
+                        cls(row[0], float(row[1]), int(row[2]))
+                    count += 1
+        except FileNotFoundError:
+            raise FileNotFoundError("Отсутствует файл item.csv")
+        except InstantiateCSVError:
+            raise InstantiateCSVError("Файл item.csv поврежден")
 
 
     @staticmethod
@@ -104,3 +110,10 @@ class Item:
         if isinstance(other, Item):
             return self.quantity + other.quantity
         return ValueError("Складывать можно только объекты Item и дочерние от них.")
+
+
+class InstantiateCSVError(Exception):
+    """Исключения, связаные с повреждением файла"""
+
+    def __init__(self, *args, **kwargs):
+        self.message = args[0] if args else 'Файл поврежден.'
