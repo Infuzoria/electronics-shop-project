@@ -39,6 +39,14 @@ def test_read_from_csv():
     for product in item.Item.all:
         assert isinstance(product, item.Item)
 
+    with pytest.raises(FileNotFoundError) as e:
+        item.Item.instantiate_from_csv()
+        assert str(e.value) == "Отсутствует файл item.csv"
+
+    with pytest.raises(item.InstantiateCSVError) as e:
+        item.Item.instantiate_from_csv()
+        assert str(e.value) == "Файл item.csv поврежден"
+
 
 def test_string_to_number():
     assert item.Item.string_to_number('7') == 7
