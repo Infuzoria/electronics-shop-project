@@ -87,6 +87,8 @@ class Item:
                     count += 1
         except FileNotFoundError:
             raise FileNotFoundError("Отсутствует файл item.csv")
+        except InstantiateCSVError:
+            raise InstantiateCSVError("Файл item.csv поврежден")
 
 
     @staticmethod
@@ -108,3 +110,10 @@ class Item:
         if isinstance(other, Item):
             return self.quantity + other.quantity
         return ValueError("Складывать можно только объекты Item и дочерние от них.")
+
+
+class InstantiateCSVError(Exception):
+    """Исключения, связаные с повреждением файла"""
+
+    def __init__(self, *args, **kwargs):
+        self.message = args[0] if args else 'Файл поврежден.'
